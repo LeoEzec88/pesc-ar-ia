@@ -177,7 +177,7 @@ WEATHER_API_KEY=tu_api_key_de_openweathermap_aqui
 ```json
 {
   "status": "ok",
-  "message": "FishAI Backend funcionando correctamente"
+  "message": "API Backend funcionando correctamente"
 }
 ```
 
