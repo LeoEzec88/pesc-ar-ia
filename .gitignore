@@ -1,0 +1,19 @@
+# Directorios de entorno virtual
+venv/
+.venv/
+
+# Archivos de Python generados
+__pycache__/
+*.pyc
+*.log
+
+# Archivos de configuración local (si los tuvieras, por ejemplo, si creas un .env para variables locales)
+.env
+.flaskenv
+
+# Archivos específicos de IDEs (Visual Studio Code, etc.)
+.vscode/
+.idea/
+
+# Directorios de dependencias
+node_modules/ # Si añades un frontend con JS/NPM

@@ -1,0 +1,1 @@
+web: python -c "import app; print('App imported successfully')" && gunicorn app:app --bind 0.0.0.0:$PORT --log-level debug

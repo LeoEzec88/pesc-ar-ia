@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesc-ar-ia - Pesca Inteligente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0,255,255,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .ai-assistant {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .message {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 15px;
+            animation: fadeInUp 0.5s ease;
+            line-height: 1.6;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin-left: 20%;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            margin-right: 20%;
+        }
+
+        /* Estilos para formato mejorado de texto */
+        .ai-message h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 0.8em 0 0.5em 0;
+            color: #fff;
+        }
+
+        .ai-message h4 {
+            font-size: 1em;
+            font-weight: bold;
+            margin: 0.6em 0 0.3em 0;
+            color: #fff;
+        }
+
+        .ai-message p {
+            margin: 0.5em 0;
+            line-height: 1.6;
+        }
+
+        .ai-message ul {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+        }
+
+        .ai-message li {
+            margin: 0.3em 0;
+            line-height: 1.5;
+        }
+
+        .ai-message strong {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .ai-message em {
+            font-style: italic;
+            color: #f0f0f0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .weather-widget {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-widget::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+            animation: rotate 20s linear infinite;
+        }
+
+        .weather-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .weather-location {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .weather-current {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .weather-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .weather-temp {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .fishing-advice {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .bait-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .bait-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .bait-card:hover, .bait-card.selected {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #00ffff;
+            transform: scale(1.05);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-fish {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .recommendation-container {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .recommendation-container h4 {
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .recommendation-content {
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-fish" style="top: 20%; left: 10%;">🐟</div>
+        <div class="floating-fish" style="top: 60%; right: 15%; animation-delay: -2s;">🎣</div>
+        <div class="floating-fish" style="top: 40%; left: 70%; animation-delay: -4s;">🐠</div>
+        <div class="floating-fish" style="top: 80%; left: 20%; animation-delay: -6s;">🦈</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="logo">🎣 Pesc-Ar-Ia</h1>
+            <p class="subtitle">Tu Asistente de Pesca inteligente</p>
+        </header>
+
+        <div class="ai-assistant">
+            <h2>🤖 Asistente IA de Pesca</h2>
+            <div class="chat-container" id="chatContainer">
+                <div class="message ai-message">
+                    ¡Hola pescador! 🎣 Soy tu asistente de pesca con IA. Puedo ayudarte con recomendaciones personalizadas sobre carnadas, técnicas, clima y los mejores spots de pesca. ¿En qué te puedo ayudar hoy?
+                </div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="userInput" placeholder="Pregúntame sobre pesca, clima, carnadas, técnicas..." />
+                <button class="btn" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+
+        <div class="weather-widget">
+            <h3>🌤️ Condiciones en Tiempo Real</h3>
+            <div class="weather-info" id="weatherInfo">
+                <div class="weather-location" id="locationName">📍 Detectando ubicación...</div>
+                <div class="weather-current">
+                    <div class="weather-item">
+                        <div class="weather-temp" id="temperature">--°C</div>
+                        <div>Temperatura</div>
+                    </div>
+                    <div class="weather-item">
+                        <div id="weatherCondition">--</div>
+                        <div>Condición</div>
+                    </div>
+                    <div class="weather-item">
+                        <div id="windSpeed">-- km/h</div>
+                        <div>Viento</div>
+                    </div>
+                    <div class="weather-item">
+                        <div id="humidity">--%</div>
+                        <div>Humedad</div>
+                    </div>
+                </div>
+                <div class="fishing-advice" id="fishingAdvice">
+                    🎣 Obteniendo recomendaciones de pesca...
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <h3>Recomendaciones IA</h3>
+                <p>Algoritmos avanzados analizan patrones de pesca, condiciones climáticas y comportamiento de peces para darte recomendaciones precisas y personalizadas.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🗺️</span>
+                <h3>Mapas Inteligentes</h3>
+                <p>Descubre los mejores spots de pesca con mapas interactivos que muestran profundidades, corrientes y zonas de mayor actividad de peces en tiempo real.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🐛</span>
+                <h3>Selector de Carnadas</h3>
+                <p>Recomendaciones de carnadas basadas en especie objetivo, estación, hora del día y condiciones del agua. Incluye carnadas vivas, artificiales y naturales.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3>Análisis Predictivo</h3>
+                <p>Predicciones de actividad de peces usando datos históricos, patrones climáticos y algoritmos de machine learning para maximizar tus capturas.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3>Diario Digital</h3>
+                <p>Registra tus pescas con fotos, ubicación GPS, condiciones y técnicas usadas. La IA aprende de tus datos para mejorar las recomendaciones.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎓</span>
+                <h3>Tutor de Técnicas</h3>
+                <p>Aprende nuevas técnicas de pesca con tutoriales interactivos, videos adaptativos y consejos personalizados según tu nivel de experiencia.</p>
+            </div>
+        </div>
+
+        <div class="ai-assistant">
+            <h3>🐛 Selector Inteligente de Carnadas</h3>
+            <p>Selecciona el tipo de pesca y obtén recomendaciones de carnadas optimizadas por IA:</p>
+            
+            <div class="bait-selector">
+                <div class="bait-card" onclick="selectBait(this, 'spinning')">
+                    <div>🎣</div>
+                    <div>Spinning</div>
+                </div>
+                <div class="bait-card" onclick="selectBait(this, 'fly')">
+                    <div>🪶</div>
+                    <div>Mosca</div>
+                </div>
+                <div class="bait-card" onclick="selectBait(this, 'bottom')">
+                    <div>⚓</div>
+                    <div>Fondo</div>
+                </div>
+                <div class="bait-card" onclick="selectBait(this, 'trolling')">
+                    <div>🚢</div>
+                    <div>Trolling</div>
+                </div>
+                <div class="bait-card" onclick="selectBait(this, 'surf')">
+                    <div>🌊</div>
+                    <div>Surf</div>
+                </div>
+            </div>
+            
+            <div id="baitRecommendations"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración para conectar con el backend Flask
+        const API_BASE_URL = window.location.origin; // Usa la misma URL base que el frontend
+        
+        // Configuración de clima
+        const WEATHER_API_KEY = 'bd5e378503939ddaee76f12ad7a97608'; // API key gratuita de OpenWeatherMap
+        const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+        
+        let chatHistory = [];
+        let currentWeatherData = null;
+
+        // Función para convertir Markdown a HTML
+        function markdownToHtml(text) {
+            // Convertir texto markdown a HTML legible
+            let html = text;
+            
+            // Convertir títulos
+            html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^# (.*$)/gm, '<h3>$1</h3>');
+            
+            // Convertir texto en negrita
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            
+            // Convertir listas con viñetas
+            html = html.replace(/^\* (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+            
+            // Envolver listas en tags ul
+            html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+            
+            // Convertir saltos de línea dobles en párrafos
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            
+            // Limpiar párrafos vacíos
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>\s*<\/p>/g, '');
+            
+            // Convertir saltos de línea simples en <br>
+            html = html.replace(/\n/g, '<br>');
+            
+            return html;
+        }
+
+        // Función para limpiar y formatear el texto de respuesta
+        function formatAIResponse(text) {
+            // Si el texto contiene markdown, convertirlo
+            if (text.includes('**') || text.includes('*') || text.includes('###') || text.includes('##')) {
+                return markdownToHtml(text);
+            }
+            
+            // Si no es markdown, simplemente reemplazar saltos de línea
+            return text.replace(/\n/g, '<br>');
+        }
+
+        // Función para obtener ubicación y clima
+        async function getLocationAndWeather() {
+            try {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            await getWeatherData(lat, lon);
+                        },
+                        () => {
+                            // Si no se puede obtener la ubicación, usar Buenos Aires por defecto
+                            getWeatherData(-34.6118, -58.3960);
+                        }
+                    );
+                } else {
+                    // Navegador no soporta geolocalización, usar Buenos Aires
+                    getWeatherData(-34.6118, -58.3960);
+                }
+            } catch (error) {
+                console.error('Error obteniendo ubicación:', error);
+                getWeatherData(-34.6118, -58.3960);
+            }
+        }
+
+        // Función para obtener datos del clima
+        async function getWeatherData(lat, lon) {
+            try {
+                const response = await fetch(`${WEATHER_API_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric&lang=es`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentWeatherData = data;
+                    updateWeatherDisplay(data);
+                    generateFishingAdvice(data);
+                } else {
+                    // Si falla la API, mostrar datos de Buenos Aires simulados
+                    showFallbackWeather();
+                }
+            } catch (error) {
+                console.error('Error obteniendo clima:', error);
+                showFallbackWeather();
+            }
+        }
+
+        // Función para actualizar la pantalla con datos del clima
+        function updateWeatherDisplay(data) {
+            document.getElementById('locationName').textContent = `📍 ${data.name}, ${data.sys.country}`;
+            document.getElementById('temperature').textContent = `${Math.round(data.main.temp)}°C`;
+            document.getElementById('weatherCondition').textContent = data.weather[0].description;
+            document.getElementById('windSpeed').textContent = `${Math.round(data.wind.speed * 3.6)} km/h`;
+            document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+        }
+
+        // Función para generar consejo de pesca basado en el clima
+        async function generateFishingAdvice(weatherData) {
+            const temp = weatherData.main.temp;
+            const condition = weatherData.weather[0].main;
+            const windSpeed = weatherData.wind.speed * 3.6; // convertir a km/h
+            const humidity = weatherData.main.humidity;
+            
+            let advice = "🎣 ";
+            
+            // Análisis de temperatura
+            if (temp < 5) {
+                advice += "Temperatura muy baja - Los peces están menos activos. Pesca profunda y con carnadas vivas. ";
+            } else if (temp >= 5 && temp < 15) {
+                advice += "Temperatura fresca - Buena para truchas y pejerreyes. Usa lombriz o mojarra. ";
+            } else if (temp >= 15 && temp < 25) {
+                advice += "Temperatura ideal - Excelente actividad de peces. Prueba spinning y fly casting. ";
+            } else {
+                advice += "Temperatura alta - Pesca temprano en la mañana o al atardecer. ";
+            }
+            
+            // Análisis de viento
+            if (windSpeed < 10) {
+                advice += "Viento calmo - Perfecto para pesca con mosca y señuelos superficiales. ";
+            } else if (windSpeed < 20) {
+                advice += "Viento moderado - Bueno para spinning, usa señuelos más pesados. ";
+            } else {
+                advice += "Viento fuerte - Busca zonas protegidas, pesca de fondo recomendada. ";
+            }
+            
+            // Análisis de condiciones
+            if (condition.includes('Rain')) {
+                advice += "Lluvia - Los peces pueden estar más activos, prueba cerca de la superficie.";
+            } else if (condition.includes('Cloud')) {
+                advice += "Nublado - Condiciones ideales, los peces se sienten seguros para alimentarse.";
+            } else if (condition.includes('Clear')) {
+                advice += "Cielo despejado - Los peces pueden estar más profundos, usa carnadas naturales.";
+            }
+            
+            document.getElementById('fishingAdvice').textContent = advice;
+        }
+
+        // Función de respaldo para mostrar clima cuando falla la API
+        function showFallbackWeather() {
+            document.getElementById('locationName').textContent = `📍 Buenos Aires, AR`;
+            document.getElementById('temperature').textContent = `-1°C`;
+            document.getElementById('weatherCondition').textContent = 'Frío';
+            document.getElementById('windSpeed').textContent = `12 km/h`;
+            document.getElementById('humidity').textContent = `75%`;
+            document.getElementById('fishingAdvice').textContent = 
+                "🎣 Temperatura muy baja - Los peces están menos activos. Recomendado: pesca profunda con lombriz o mojarra. Busca zonas más protegidas del viento. El pejerrey puede estar activo en aguas más profundas.";
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const message = userInput.value.trim();
+
+            if (!message) return;
+
+            // Mostrar mensaje del usuario
+            addMessage(message, 'user');
+            userInput.value = '';
+
+            // Mostrar indicador de carga
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message ai-message';
+            loadingDiv.innerHTML = '<div class="loading"></div> Analizando con IA...';
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                // Llamada a tu API Flask
+                const response = await fetch(`${API_BASE_URL}/api/query`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: message
+                    })
+                });
+
+                chatContainer.removeChild(loadingDiv);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiResponse = data.response;
+                    addMessage(aiResponse, 'ai');
+                } else {
+                    const errorData = await response.json();
+                    addMessage(errorData.error || 'Lo siento, hubo un error al procesar tu consulta. Por favor, intenta de nuevo.', 'ai');
+                }
+            } catch (error) {
+                chatContainer.removeChild(loadingDiv);
+                addMessage('Error de conexión con el servidor. Verifica que el backend esté funcionando.', 'ai');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(message, type) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            
+            if (type === 'ai') {
+                // Formatear la respuesta de la IA para que sea legible
+                messageDiv.innerHTML = formatAIResponse(message);
+            } else {
+                messageDiv.textContent = message;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function selectBait(element, type) {
+            // Remover selección anterior
+            document.querySelectorAll('.bait-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Seleccionar nuevo
+            element.classList.add('selected');
+            
+            // Generar recomendaciones
+            generateBaitRecommendations(type);
+        }
+
+        async function generateBaitRecommendations(fishingType) {
+            const recommendationsDiv = document.getElementById('baitRecommendations');
+            recommendationsDiv.innerHTML = '<div class="loading"></div> Generando recomendaciones con IA...';
+
+            const prompt = `Como experto en pesca, proporciona 3-4 recomendaciones específicas de carnadas para pesca de tipo ${fishingType}. Incluye carnadas naturales y artificiales, con consejos sobre cuándo y cómo usarlas. Organiza la respuesta de forma clara y práctica.`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/query`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: prompt
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const recommendations = data.response;
+                    
+                    recommendationsDiv.innerHTML = `
+                        <div class="recommendation-container">
+                            <h4>🎯 Recomendaciones IA para ${fishingType}:</h4>
+                            <div class="recommendation-content">${formatAIResponse(recommendations)}</div>
+                        </div>
+                    `;
+                } else {
+                    const errorData = await response.json();
+                    recommendationsDiv.innerHTML = '<p>Error al generar recomendaciones. Intenta de nuevo.</p>';
+                }
+            } catch (error) {
+                recommendationsDiv.innerHTML = '<p>Error de conexión con el servidor.</p>';
+                console.error('Error:', error);
+            }
+        }
+
+        // Permitir envío con Enter
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Inicialización y verificación de conexión con el backend
+        window.onload = async function() {
+            // Obtener clima y ubicación primero
+            await getLocationAndWeather();
+            
+            try {
+                // Verificar que el backend esté funcionando
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(`✅ ${data.message} Sistema listo para ayudarte con pesca.`, 'ai');
+                } else {
+                    addMessage('⚠️ Hay un problema de conexión con el servidor. Algunas funciones pueden no estar disponibles.', 'ai');
+                }
+            } catch (error) {
+                addMessage('❌ No se pudo conectar con el servidor. Verifica que el backend Flask esté funcionando.', 'ai');
+                console.error('Error de conexión:', error);
+            }
+        };
+    </script>
+</body>
+</html>
