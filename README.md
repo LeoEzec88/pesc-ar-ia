@@ -289,7 +289,7 @@ git push heroku main
 
 **Leonardo E Coronel**
 - GitHub: [@<leoEzec88>](https://github.com/LeoEzec88)
-- Email: lcoronel.unab@ejemplo.com
+- Email: lcoronel.unab@gmail.com
 
 ## 🙏 Agradecimientos
 
